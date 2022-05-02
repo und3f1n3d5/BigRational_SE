@@ -2,6 +2,63 @@
 // Created by dmitrij on 4/24/22.
 //
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest/doctest.h>
+#include <BigInt/bigInt.h>
+#include <chrono>
+
+/*
+ * +=/-= (+a += -a)
+ * +- 0
+ * *= vs Multiply  time
+ */
+
+TEST_CASE("Add") {
+    SUBCASE("+=") {
+        BigInteger A = 50, B = 3;
+        int a = 50, b = 3;
+        A += B;
+        a += b;
+        CHECK(A == a);
+        A += -B;
+        a -= b;
+        CHECK(A == a);
+        A = -A;
+        A -= -B;
+        a = -a;
+        a -= -b;
+        CHECK(A == a);
+    }
+    SUBCASE("+- 0") {
+        BigInteger A = 50, B = 0;
+        CHECK(A - A + B == B);
+        CHECK(B * -1 == B);
+    }
+}
+
+TEST_CASE("time") {
+    SUBCASE("my") {
+        BigInteger A("123456789"), B("987654321"), C(0);
+        auto start = std::chrono::steady_clock::now();
+        int iter = 15;
+        for (int i=0; i < iter; ++i) {
+            C = A*B;
+        }
+        auto end = std::chrono::steady_clock::now();
+        cout << "My multiply: " << (end - start).count() * 1.0 / iter << endl;
+    }
+    SUBCASE("built-in") {
+        unsigned long long int A = 123456789, B = 987654321, C = 0;
+        auto start = std::chrono::steady_clock::now();
+        int iter = 15;
+        for (int i=0; i < iter; ++i) {
+            C = A*B;
+        }
+        auto end = std::chrono::steady_clock::now();
+        cout << "Built-in multiply: " <<  (end - start).count() * 1.0 / iter << endl;
+    }
+}
+
 /*long long j = 0;
     while (j < 1000000){
         ++j;
@@ -246,3 +303,5 @@
         if (!u) cout << "Ra /" << endl << s1 << " " << s2;
     }*/
 //-42 72 12 15
+
+
