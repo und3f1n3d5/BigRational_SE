@@ -12,6 +12,7 @@
 void CreateWithZeroNumerator() {
     Rational badNumber(1, 0);
 }
+
 TEST_CASE("create with zero numerator") {
     CHECK_THROWS(CreateWithZeroNumerator());
 }
@@ -153,3 +154,24 @@ TEST_CASE("invalid input") {
         CHECK(input_stream.good());
     }
 }
+
+TEST_CASE("difficult moments") {
+    SUBCASE("check") {
+        CHECK_THROWS(Rational(1, 0));
+        CHECK(Rational(0, 10) == Rational(-0));
+        CHECK(Rational(1024, 512) == Rational(2));
+        Rational A(18, 16), B(9, -8);
+        CHECK(A + B == 0);
+    }
+    SUBCASE("complex operations") {
+        Rational A(1, 2), B(-2, 3);
+        double a = 1.0/2, b = -2.0/3;
+        A += ++B;
+        a += ++b;
+        CHECK(abs((double) A - a) < 0.001);
+        A *= B++ * 2 + --A - A-- / 3 + A / B;
+        a *= b++ * 2 + --a - a-- / 3 + a / b;
+        CHECK(std::abs((double) A - a) < 0.001);
+    }
+}
+
