@@ -221,7 +221,7 @@ BigInteger Rational::denum() {
 }
 
 string Rational::asDecimal(size_t precision) const {
-    string s;
+    std::string s;
     BigInteger q = 10;
     for (size_t i = 0; i < precision; ++i){
         q *= 10;
@@ -249,11 +249,11 @@ Rational::operator double() const {
     double res = 0;
     size_t i = 0;
     if (s[0] == '-') ++i;
-    for (; i < s.size() && s[i] != ','; ++i){
+    for (; i < s.size() && s[i] != '.'; ++i){
         res = res*10 + (int) s[i] - '0';
     }
     double k = 10;
-    if (s[i] == ',') ++i;
+    if (s[i] == '.') ++i;
     for (; i < s.size(); ++i) {
         res += ((int) s[i] - '0') / k;
         k *= 10;
